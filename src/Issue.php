@@ -19,7 +19,7 @@ class Issue implements Arrayable, JsonSerializable
     ) {
         $this->title = sprintf('%s: %s',
             config('app.name'),
-            str($this->description)->limit(20)
+            str($this->description)->limit(30)
         );
     }
 
