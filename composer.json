@@ -1,0 +1,19 @@
+{
+    "name": "avantcorp/report-to-jira",
+    "type": "library",
+    "license": "proprietery",
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Avant\\ReportToJira\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Avant\\ReportToJira\\ReportToJiraServiceProvider"
+            ]
+        }
+    }
+}
