@@ -16,6 +16,7 @@ class ReportToJiraServiceProvider extends ServiceProvider
             config('report-to-jira.email'),
             config('report-to-jira.api_token'),
             config('report-to-jira.project'),
+            config('report-to-jira.parent_key'),
             config('report-to-jira.client.base_url'),
         ));
     }

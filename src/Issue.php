@@ -8,24 +8,25 @@ use JsonSerializable;
 
 class Issue implements Arrayable, JsonSerializable
 {
-    public string $title;
-
     public function __construct(
         public ?string $reporterName,
         public ?string $reporterEmail,
         public ?string $url,
         public string $description,
         public ?string $project = null,
-    ) {
-        $this->title = sprintf('%s: %s',
-            config('app.name'),
-            str($this->description)->limit(30)
-        );
-    }
+        public ?string $parentKey = null,
+    ) {}
 
     public function withProject(string $project): static
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function withParentKey(?string $parentKey): static
+    {
+        $this->parentKey = $parentKey;
 
         return $this;
     }
@@ -56,18 +57,26 @@ class Issue implements Arrayable, JsonSerializable
             'content' => [['type' => 'text', 'text' => $this->description]],
         ];
 
+        $title = str($this->description)
+            ->limit(30)
+            ->unless($this->parentKey, fn(Stringable $title) => $title
+                ->prepend(sprintf('%s: ', config('app.name')))
+            )
+            ->toString();
+
         return [
-            'fields' => [
-                'summary'     => $this->title,
+            'fields' => array_filter([
+                'summary'     => $title,
                 'labels'      => ['user-reported'],
                 'project'     => ['key' => $this->project],
                 'issuetype'   => ['name' => 'Task'],
+                'parent'      => $this->parentKey ? ['key' => $this->parentKey] : null,
                 'description' => [
                     'type'    => 'doc',
                     'version' => 1,
                     'content' => $content,
                 ],
-            ],
+            ]),
         ];
     }
 

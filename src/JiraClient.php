@@ -16,6 +16,7 @@ class JiraClient
         protected string $email,
         protected string $apiToken,
         protected string $project,
+        protected ?string $parentKey,
         protected string $baseUrl,
     ) {}
 
@@ -31,7 +32,9 @@ class JiraClient
 
     public function createIssue(Issue $issue): bool
     {
-        $issue->withProject($this->project);
+        $issue
+            ->withProject($this->project)
+            ->withParentKey($this->parentKey);
 
         return !is_null(
             rescue(
