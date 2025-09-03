@@ -62,6 +62,7 @@ class Issue implements Arrayable, JsonSerializable
             ->unless($this->parentKey, fn(Stringable $title) => $title
                 ->prepend(sprintf('%s: ', config('app.name')))
             )
+            ->replace("\n", ' ')
             ->toString();
 
         return [
